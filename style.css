@@ -1,0 +1,69 @@
+/* FUENTE E IMPORTACIONES GENERALES */
+body { 
+    font-family: 'Poppins', sans-serif; 
+    background-color: #F7F8FC; /* Corresponde a brand-bg */
+}
+
+/* ESTILOS PARA LA APLICACIÓN PRINCIPAL (app.html) */
+.main-content {
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* Barra lateral */
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    color: #4A5568;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sidebar-link:hover {
+    background-color: #E2E8F0;
+}
+.sidebar-link.active {
+    background-color: #4A5568;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+.sidebar-link svg {
+    margin-right: 0.75rem;
+}
+
+/* Barra lateral en móviles */
+.sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+.sidebar.open {
+    transform: translateX(0);
+}
+
+/* Estilos específicos de las apps (loader, tabs, etc.) */
+.loader-mc { border: 4px solid #e5e7eb; border-top: 4px solid #BF103C; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+.loader-wc { border: 4px solid #e5e7eb; border-top: 4px solid #075E54; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.template-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; padding: 0 1.5rem; }
+.template-body.open { max-height: 800px; padding: 1.5rem; }
+
+.tab-btn-mc.active { color: #BF103C; border-bottom-color: #BF103C; font-weight: 600; }
+.tab-btn-wc.active { color: #075E54; border-bottom-color: #075E54; font-weight: 600; }
+.tab-btn { border-bottom-width: 2px; border-color: transparent; }
+
+.placeholder-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Estilos para el editor de texto Quill */
+.ql-toolbar { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-color: #d1d5db !important; }
+.ql-container { border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; border-color: #d1d5db !important; min-height: 150px; font-family: 'Poppins', sans-serif; }
+.ql-editor.ql-blank::before { font-style: normal; color: rgba(0,0,0,0.4); }
+
+/* Estilos para el cuerpo del resultado generado */
+.result-body p { margin-bottom: 1em; }
+.result-body * { background-color: transparent !important; }
+.result-body a { color: #0b69ff; text-decoration: underline; }
+.result-body a:hover { color: #0056d6; }

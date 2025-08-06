@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Suite: MailCraft & WhatsCraft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'magenta': '#BF103C', 'light-gray': '#F2F3F8', 'graphite': '#39414E', 'mint': '#0FCCC9',
+                        'whatsapp-green': '#128C7E', 'whatsapp-dark': '#075E54', 'whatsapp-light': '#25D366', 'brand-bg': '#F7F8FC',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-bg">
+
+    <div class="flex h-screen overflow-hidden">
+        <aside id="sidebar" class="sidebar fixed z-30 inset-y-0 left-0 w-64 bg-white shadow-lg p-4 lg:translate-x-0">
+            <div class="flex items-center justify-center mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-graphite"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <h1 class="text-2xl font-bold text-graphite ml-2">Template Suite</h1>
+            </div>
+            <nav class="space-y-2">
+                <a href="#" class="sidebar-link active" data-page="page-home"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span data-i18n="sidebarHome">Inicio</span></a>
+                <a href="#" class="sidebar-link" data-page="page-mailcraft"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span data-i18n="sidebarMailCraft">MailCraft</span></a>
+                <a href="#" class="sidebar-link" data-page="page-whatscraft"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg><span data-i18n="sidebarWhatsCraft">WhatsCraft</span></a>
+                <a href="#" class="sidebar-link" data-page="page-templates"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.84l8.57 3.92a2 2 0 0 0 1.66 0l8.57-3.92a1 1 0 0 0 0-1.84Z"/><path d="m22 17.65-8.57 3.92a2 2 0 0 1-1.66 0L3.2 17.65"/><path d="m22 12.65-8.57 3.92a2 2 0 0 1-1.66 0L3.2 12.65"/></svg><span data-i18n="sidebarTemplates">Plantillas</span></a>
+            </nav>
+        </aside>
+
+        <div id="main-content" class="main-content flex-1 flex flex-col h-screen overflow-hidden lg:ml-64">
+            <header class="hidden lg:flex items-center justify-end h-20 px-8 bg-white shadow-sm flex-shrink-0">
+                <div class="relative">
+                    <button id="user-menu-button" class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-graphite font-bold text-lg hover:bg-gray-300 transition"><span>EB</span></button>
+                    <div id="user-menu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl z-50 origin-top-right">
+                        <div class="p-4 border-b border-gray-200"><p class="font-bold text-graphite truncate">Eduardo B.</p><p class="text-sm text-gray-500 truncate">eduardo.lopez@whitepress.com</p></div>
+                        <div class="py-1">
+                            <a href="#" id="settings-link" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-2"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg><span data-i18n="userMenuSettings">Ajustes</span></a>
+                            <a href="#" id="logout-link" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span data-i18n="userMenuLogout">Cerrar Sesión</span></a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <header class="lg:hidden sticky top-0 bg-white shadow-md p-4 flex items-center justify-between z-20 flex-shrink-0">
+                <div class="flex items-center">
+                    <button id="menu-toggle" class="text-gray-600 focus:outline-none"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
+                    <h1 id="mobile-header-title" class="text-xl font-bold text-graphite ml-4" data-i18n="mobileHeaderTitle">Inicio</h1>
+                </div>
+                 <button id="mobile-user-menu-button" class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-graphite font-bold text-sm hover:bg-gray-300 transition"><span>EB</span></button>
+            </header>
+            <main class="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto">
+                <div id="page-home" class="page">
+                    <header class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-bold text-graphite" data-i18n="homeTitle">Bienvenido a Template Suite</h1><p class="text-gray-500 mt-3 text-lg max-w-2xl mx-auto" data-i18n="homeSubtitle">Tu centro de herramientas para una comunicación más eficiente. Elige una herramienta para comenzar.</p></header>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center text-center hover:shadow-2xl transition-shadow duration-300">
+                            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background-color: #BF103C;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                            <h2 class="text-2xl font-bold text-graphite mb-2">MailCraft</h2>
+                            <p class="text-gray-600 mb-6 flex-grow" data-i18n="mcCardDescription">Crea correos personalizados de alto impacto en segundos. Usa plantillas dinámicas y procesa listas de contactos para agilizar tu comunicación.</p>
+                            <button class="nav-button w-full bg-magenta text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition" data-page="page-mailcraft" data-i18n="goToMailCraft">Ir a MailCraft</button>
+                        </div>
+                        <div class="bg-white p-8 rounded-2xl shadow-lg flex flex-col items-center text-center hover:shadow-2xl transition-shadow duration-300">
+                             <div class="w-16 h-16 rounded-full flex items-center justify-center mb-4" style="background-color: #075E54;"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                            <h2 class="text-2xl font-bold text-graphite mb-2">WhatsCraft</h2>
+                            <p class="text-gray-600 mb-6 flex-grow" data-i18n="wcCardDescription">Genera links de WhatsApp y mensajes personalizados al instante. Ideal para contactar leads de forma rápida y eficiente, manual o masivamente.</p>
+                             <button class="nav-button w-full bg-whatsapp-dark text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition" data-page="page-whatscraft" data-i18n="goToWhatsCraft">Ir a WhatsCraft</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="page-mailcraft" class="page hidden">
+                    <div class="container mx-auto max-w-7xl">
+                        <header class="text-center mb-10"><h1 class="text-4xl md:text-5xl font-bold text-graphite">MailCraft</h1><p class="text-gray-500 mt-2 text-lg" data-i18n="mcTitle">Crea correos personalizados de alto impacto en segundos.</p></header>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-start">
+                            <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-6">
+                                <div><h2 class="text-xl font-bold mb-3 text-graphite" data-i18n="step1">1. Elige tu Plantilla</h2><select id="mc-template-selector" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-magenta focus:border-magenta transition"></select></div>
+                                <div>
+                                    <h2 class="text-xl font-bold mb-3 text-graphite" data-i18n="step2">2. Proporciona los Datos</h2>
+                                    <div class="border-b border-gray-200"><nav class="-mb-px flex space-x-6" aria-label="Tabs"><button id="mc-tab-manual" class="tab-btn tab-btn-mc whitespace-nowrap py-3 px-1 font-medium text-sm" data-i18n="manualInput">Entrada Manual</button><button id="mc-tab-file" class="tab-btn tab-btn-mc whitespace-nowrap py-3 px-1 font-medium text-sm text-gray-500 hover:text-graphite hover:border-gray-300" data-i18n="processFile">Procesar Archivo</button></nav></div>
+                                    <div id="mc-panel-manual" class="mt-4"><textarea id="mc-contact-info" rows="6" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-magenta focus:border-magenta transition" placeholder="Pega aquí la información del contacto...&#10;Ej: Juan Pérez, juan.perez@empresa.com, CEO en Tech Solutions Inc."></textarea></div>
+                                    <div id="mc-panel-file" class="mt-4 hidden">
+                                        <div class="flex items-center justify-center w-full">
+                                            <label for="mc-file-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                                <div id="mc-file-upload-ui"><div class="flex flex-col items-center justify-center pt-5 pb-6"><svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/></svg><p class="mb-2 text-sm text-gray-500"><span class="font-semibold" data-i18n="clickToUpload">Haz clic para subir</span><span data-i18n="orDrag"> o arrastra</span></p><p class="text-xs text-gray-500">XLSX, XLS, o CSV</p></div></div>
+                                                <div id="mc-file-info-ui" class="hidden text-center"><p id="mc-file-name" class="font-semibold text-graphite"></p><p id="mc-lead-count" class="text-sm text-gray-600"></p></div>
+                                                <input id="mc-file-upload" type="file" class="hidden" accept=".xlsx, .xls, .csv"/>
+                                            </label>
+                                        </div> 
+                                        <button id="mc-download-template-btn" class="text-sm text-magenta hover:underline mt-3 w-full text-center" data-i18n="downloadExample">Descargar plantilla de ejemplo</button>
+                                    </div>
+                                </div>
+                                <button id="mc-generate-btn" class="w-full bg-magenta text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-magenta focus:ring-opacity-50 transition-all duration-300 ease-in-out flex items-center justify-center gap-2 text-lg mt-auto"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wand-sparkles"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2 18.12V22h3.88l14.76-14.76a1.21 1.21 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-2"/><path d="M11 3H9"/></svg><span id="mc-generate-btn-text" data-i18n="generateEmail">Generar Correo</span></button>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-4">
+                                <h2 class="text-xl font-bold text-graphite flex-shrink-0" data-i18n="step3">3. Resultado Final</h2>
+                                <div class="flex-shrink-0">
+                                    <div class="flex justify-between items-center mb-2"><label for="mc-result-email" class="font-semibold text-graphite" data-i18n="leadEmail">Email del Lead</label><button id="mc-copy-email-btn" class="bg-gray-200 text-graphite font-semibold py-1 px-3 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all text-sm flex items-center gap-2" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span id="mc-copy-email-btn-text" data-i18n="copy">Copiar</span></button></div>
+                                    <input id="mc-result-email" type="text" readonly class="w-full bg-light-gray p-3 border border-gray-200 rounded-lg" placeholder="Aquí aparecerá el email del lead...">
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div class="flex justify-between items-center mb-2"><label for="mc-result-subject" class="font-semibold text-graphite" data-i18n="subject">Asunto</label><button id="mc-copy-subject-btn" class="bg-gray-200 text-graphite font-semibold py-1 px-3 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all text-sm flex items-center gap-2" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span id="mc-copy-subject-btn-text" data-i18n="copy">Copiar</span></button></div>
+                                    <input id="mc-result-subject" type="text" readonly class="w-full bg-light-gray p-3 border border-gray-200 rounded-lg" placeholder="Aquí aparecerá el asunto del correo...">
+                                </div>
+                                <div class="flex flex-col flex-grow min-h-0">
+                                    <div class="flex justify-between items-center mb-2 flex-shrink-0"><label class="font-semibold text-graphite" data-i18n="emailBody">Cuerpo del Correo</label><button id="mc-copy-body-btn" class="bg-gray-200 text-graphite font-semibold py-1 px-3 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all text-sm flex items-center gap-2" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span id="mc-copy-body-btn-text" data-i18n="copy">Copiar</span></button></div>
+                                    <div id="mc-loading-spinner" class="hidden flex flex-col items-center justify-center h-full min-h-[250px]"><div class="loader-mc"></div><p class="text-gray-500 mt-3" data-i18n="generating">Analizando y generando...</p></div>
+                                    <div id="mc-result-container" class="w-full h-full bg-light-gray p-4 border border-gray-200 rounded-lg overflow-y-auto"><p id="mc-placeholder-text" class="text-gray-500">Aquí aparecerá el cuerpo del correo...</p><div id="mc-result-body" class="result-body"></div></div>
+                                </div>
+                                <div class="mt-auto pt-4 border-t border-gray-200 flex flex-col sm:flex-row gap-3"><button id="mc-send-email-btn" class="w-full sm:w-auto flex-grow bg-mint text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-mint focus:ring-opacity-50 transition-all duration-300 flex items-center justify-center gap-2 text-lg disabled:bg-gray-300 disabled:cursor-not-allowed" disabled><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg><span data-i18n="sendEmail">Enviar Correo</span></button></div>
+                            </div>
+                        </div>
+                        <div class="mt-8 bg-white p-6 rounded-2xl shadow-lg">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+                                <div><h2 class="text-2xl font-bold text-graphite" data-i18n="myTemplates">Mis Plantillas</h2><p class="text-gray-500" data-i18n="clickTags">Haz clic en los tags para insertarlos en tu plantilla.</p></div>
+                                <button id="mc-add-template-btn" class="w-full sm:w-auto bg-mint text-white font-bold py-2 px-5 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-mint focus:ring-opacity-50 transition-all" data-i18n="createNewTemplate">Crear Nueva Plantilla</button>
+                            </div>
+                            <div id="mc-placeholder-tags-container" class="flex flex-wrap gap-2 mb-6"></div>
+                            <div id="mc-templates-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="page-whatscraft" class="page hidden">
+                     <div class="container mx-auto max-w-7xl">
+                        <header class="text-center mb-10"><h1 class="text-4xl md:text-5xl font-bold text-graphite">WhatsCraft</h1><p class="text-gray-500 mt-2 text-lg" data-i18n="wcTitle">Genera links de WhatsApp y mensajes personalizados al instante.</p></header>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-start">
+                            <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-6">
+                                <div><h2 class="text-xl font-bold mb-3 text-graphite" data-i18n="step1WC">1. Elige tu Plantilla de Mensaje</h2><select id="wc-template-selector" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-whatsapp-dark focus:border-whatsapp-dark transition"></select></div>
+                                <div>
+                                    <h2 class="text-xl font-bold mb-3 text-graphite" data-i18n="step2">2. Proporciona los Datos</h2>
+                                    <div class="border-b border-gray-200"><nav class="-mb-px flex space-x-6" aria-label="Tabs"><button id="wc-tab-manual" class="tab-btn tab-btn-wc whitespace-nowrap py-3 px-1 font-medium text-sm" data-i18n="manualInput">Entrada Manual</button><button id="wc-tab-file" class="tab-btn tab-btn-wc whitespace-nowrap py-3 px-1 font-medium text-sm text-gray-500 hover:text-graphite hover:border-gray-300" data-i18n="processFile">Procesar Archivo</button></nav></div>
+                                    <div id="wc-panel-manual" class="mt-4"><textarea id="wc-contact-info" rows="6" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-whatsapp-dark focus:border-whatsapp-dark transition" placeholder="Pega aquí la información del lead...&#10;Ej: Juan Perez +34 612 345 678 en Agencia de Marketing"></textarea></div>
+                                    <div id="wc-panel-file" class="mt-4 hidden">
+                                        <div class="flex items-center justify-center w-full">
+                                            <label for="wc-file-upload" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                                <div id="wc-file-upload-ui"><div class="flex flex-col items-center justify-center pt-5 pb-6"><svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/></svg><p class="mb-2 text-sm text-gray-500"><span class="font-semibold" data-i18n="clickToUpload">Haz clic para subir</span><span data-i18n="orDrag"> o arrastra</span></p><p class="text-xs text-gray-500">XLSX, XLS, o CSV</p></div></div>
+                                                <div id="wc-file-info-ui" class="hidden text-center"><p id="wc-file-name" class="font-semibold text-graphite"></p><p id="wc-lead-count" class="text-sm text-gray-600"></p></div>
+                                                <input id="wc-file-upload" type="file" class="hidden" accept=".xlsx, .xls, .csv"/>
+                                            </label>
+                                        </div> 
+                                        <button id="wc-download-template-btn" class="text-sm text-whatsapp-dark hover:underline mt-3 w-full text-center" data-i18n="downloadExample">Descargar plantilla de ejemplo</button>
+                                    </div>
+                                </div>
+                                <button id="wc-generate-btn" class="w-full bg-whatsapp-dark text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-whatsapp-dark focus:ring-opacity-50 transition-all duration-300 ease-in-out flex items-center justify-center gap-2 text-lg mt-auto"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wand-sparkles"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2 18.12V22h3.88l14.76-14.76a1.21 1.21 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-2"/><path d="M11 3H9"/></svg><span id="wc-generate-btn-text" data-i18n="generateLink">Generar Link</span></button>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-4">
+                                <h2 class="text-xl font-bold text-graphite flex-shrink-0" data-i18n="step3">3. Resultado Final</h2>
+                                <div>
+                                    <div class="flex justify-between items-center mb-2"><label for="wc-result-link" class="font-semibold text-graphite" data-i18n="whatsappLink">Link de WhatsApp</label><div class="flex items-center gap-2"><button id="wc-copy-link-btn" class="bg-gray-200 text-graphite font-semibold py-1 px-3 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all text-sm flex items-center gap-2" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span id="wc-copy-link-btn-text" data-i18n="copy">Copiar</span></button><button id="wc-go-to-link-btn" class="bg-gray-200 text-graphite font-semibold py-1 px-3 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all text-sm flex items-center gap-2" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-right"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg><span data-i18n="goTo">Ir a...</span></button></div></div>
+                                    <input id="wc-result-link" type="text" readonly class="w-full bg-light-gray p-3 border border-gray-200 rounded-lg" placeholder="Aquí aparecerá el link de WhatsApp...">
+                                </div>
+                                <div class="flex flex-col flex-grow min-h-0">
+                                    <div class="flex justify-between items-center mb-2 flex-shrink-0"><label class="font-semibold text-graphite" data-i18n="whatsappMessage">Mensaje para WhatsApp</label><button id="wc-copy-body-btn" class="bg-gray-200 text-graphite font-semibold py-1 px-3 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all text-sm flex items-center gap-2" disabled><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span id="wc-copy-body-btn-text" data-i18n="copyMessage">Copiar Mensaje</span></button></div>
+                                    <div id="wc-loading-spinner" class="hidden flex flex-col items-center justify-center h-full min-h-[200px]"><div class="loader-wc"></div><p class="text-gray-500 mt-3" data-i18n="generating">Analizando y generando...</p></div>
+                                    <div id="wc-result-container" class="w-full h-full bg-light-gray p-4 border border-gray-200 rounded-lg overflow-y-auto"><p id="wc-placeholder-text" class="text-gray-500">Aquí aparecerá el mensaje para WhatsApp...</p><div id="wc-result-body" class="result-body"></div></div>
+                                </div>
+                                <button id="wc-send-whatsapp-btn" class="w-full bg-whatsapp-light text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-whatsapp-light focus:ring-opacity-50 transition-all duration-300 ease-in-out flex items-center justify-center gap-2 text-lg mt-2 disabled:bg-gray-300 disabled:cursor-not-allowed" disabled><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg><span data-i18n="sendWhatsapp">Enviar WhatsApp</span></button>
+                            </div>
+                        </div>
+                        <div class="mt-8 bg-white p-6 rounded-2xl shadow-lg">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+                                <div><h2 class="text-2xl font-bold text-graphite" data-i18n="myTemplates">Mis Plantillas</h2><p class="text-gray-500" data-i18n="clickTagsWC">Haz clic en el tag para insertarlo. ¡Puedes usar emojis! 😉</p></div>
+                                <button id="wc-add-template-btn" class="w-full sm:w-auto bg-whatsapp-light text-white font-bold py-2 px-5 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-whatsapp-light focus:ring-opacity-50 transition-all" data-i18n="createNewTemplate">Crear Nueva Plantilla</button>
+                            </div>
+                            <div id="wc-placeholder-tags-container" class="flex flex-wrap gap-2 mb-6"></div>
+                            <div id="wc-templates-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="page-templates" class="page hidden">
+                    <div class="container mx-auto max-w-7xl">
+                        <header class="mb-10"><h1 class="text-4xl md:text-5xl font-bold text-graphite" data-i18n="templatesTitle">Gestor de Plantillas</h1><p class="text-gray-500 mt-2 text-lg" data-i18n="templatesSubtitle">Busca, edita y elimina todas tus plantillas en un solo lugar.</p></header>
+                        <div class="mb-8"><div class="relative"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><svg class="w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div><input type="text" id="template-search-input" placeholder="Buscar plantillas por nombre..." class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition"></div></div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div>
+                                <div class="flex items-center gap-3 mb-4"><div class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: #BF103C;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><h2 class="text-2xl font-bold text-graphite" data-i18n="emailTemplates">Plantillas de Email</h2></div>
+                                <div id="manager-mc-templates-list" class="space-y-3 bg-white p-4 rounded-xl shadow-md"></div>
+                            </div>
+                            <div>
+                                 <div class="flex items-center gap-3 mb-4"><div class="w-8 h-8 rounded-full flex items-center justify-center" style="background-color: #075E54;"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div><h2 class="text-2xl font-bold text-graphite" data-i18n="whatsappTemplates">Plantillas de WhatsApp</h2></div>
+                                <div id="manager-wc-templates-list" class="space-y-3 bg-white p-4 rounded-xl shadow-md"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="page-settings" class="page hidden">
+                    <div class="container mx-auto max-w-4xl">
+                         <header class="mb-10"><h1 class="text-4xl md:text-5xl font-bold text-graphite" data-i18n="settingsTitle">Ajustes</h1><p class="text-gray-500 mt-2 text-lg" data-i18n="settingsSubtitle">Gestiona la información de tu perfil y tus preferencias.</p></header>
+                        <div class="bg-white p-8 rounded-2xl shadow-lg">
+                            <h2 class="text-2xl font-bold text-graphite mb-6" data-i18n="profileInfo">Información del Perfil</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div><label for="profile-name" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="nameLabel">Nombre</label><input type="text" id="profile-name" value="Eduardo" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition"></div>
+                                 <div><label for="profile-lastname" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="lastnameLabel">Apellido</label><input type="text" id="profile-lastname" value="B." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition"></div>
+                                <div class="md:col-span-2"><label for="profile-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label><input type="email" id="profile-email" value="eduardo.lopez@whitepress.com" readonly class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"></div>
+                                <div>
+                                    <label for="profile-language" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="languageLabel">Idioma de la Interfaz</label>
+                                    <select id="profile-language" class="language-selector w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition"><option value="es">Español</option><option value="en">English</option></select>
+                                </div>
+                            </div>
+                            <div class="mt-6 border-t pt-6"><button id="save-profile-btn" class="bg-graphite text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-graphite focus:ring-opacity-50 transition" data-i18n="saveProfile">Guardar Perfil</button></div>
+                        </div>
+                        <div class="bg-white p-8 rounded-2xl shadow-lg mt-8">
+                             <h2 class="text-2xl font-bold text-graphite mb-6" data-i18n="updatePassword">Actualizar Contraseña</h2>
+                             <div><label for="profile-password" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="newPassword">Nueva Contraseña</label><input type="password" id="profile-password" placeholder="Introduce la nueva contraseña" class="w-full md:w-1/2 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition"></div>
+                             <div class="mt-6 border-t pt-6"><button id="update-password-btn" class="bg-mint text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-4 focus:ring-mint focus:ring-opacity-50 transition" data-i18n="updatePasswordBtn">Actualizar Contraseña</button></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+<script src="i18n.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

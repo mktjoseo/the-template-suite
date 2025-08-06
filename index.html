@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Template Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'magenta': '#BF103C', 'light-gray': '#F2F3F8', 'graphite': '#39414E', 'mint': '#0FCCC9',
+                        'whatsapp-green': '#128C7E', 'whatsapp-dark': '#075E54', 'whatsapp-light': '#25D366', 'brand-bg': '#F7F8FC',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-bg flex items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white p-8 sm:p-12 rounded-2xl shadow-xl max-w-md w-full text-center">
+        <h1 class="text-3xl sm:text-4xl font-bold text-graphite mb-2" data-i18n="loginTitle">Accede a Template Suite</h1>
+        <p class="text-gray-500 mb-8" data-i18n="loginSubtitle">Inicia sesión para generar plantillas para email y whatsapp en segundos.</p>
+
+        <form id="login-form" class="space-y-6">
+            <div>
+                <input type="email" id="email" data-i18n="emailPlaceholder" placeholder="Tu Correo Electrónico" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition" required>
+            </div>
+            <div class="relative">
+                <input type="password" id="password" data-i18n="passwordPlaceholder" placeholder="Tu Contraseña" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition" required>
+                <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 px-4 flex items-center text-gray-500 hover:text-graphite">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+            </div>
+            <div class="text-right">
+                <!-- Color corregido a azul -->
+                <a href="#" class="text-sm text-blue-600 hover:text-blue-800 transition-colors" data-i18n="forgotPassword">¿Olvidaste tu contraseña?</a>
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-graphite text-white font-bold py-4 px-4 rounded-lg hover:bg-opacity-90 transition-all duration-300" data-i18n="loginButton">Iniciar Sesión</button>
+            </div>
+        </form>
+
+        <!-- Texto y enlace a Registro (CÓDIGO AÑADIDO) -->
+        <p class="mt-8 text-gray-600">
+            <span data-i18n="noAccount">¿No tienes una cuenta?</span>
+            <a href="register.html" class="text-magenta font-semibold hover:underline" data-i18n="registerNow">Regístrate ahora</a>
+        </p>
+
+        <div class="mt-6">
+             <select class="language-selector bg-transparent text-gray-600 text-sm rounded-lg p-2 hover:bg-gray-100 focus:outline-none">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+    </div>
+    
+    <script src="i18n.js"></script>
+    <script>
+        const togglePassword = document.getElementById('toggle-password');
+        const password = document.getElementById('password');
+        togglePassword.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+        });
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = 'app.html';
+        });
+    </script>
+</body>
+</html>
