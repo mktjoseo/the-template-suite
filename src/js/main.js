@@ -698,12 +698,83 @@ function initWhatsCraft(user) {
         window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageText)}`, '_blank');
     }
     
-    if(dom.fileUpload) dom.fileUpload.addEventListener('change', (event) => { /* Tu lógica de carga de archivos no cambia */ });
-    function updateFileUI(fileName, leadCount) { /* Tu lógica de UI no cambia */ }
-    function resetFileState() { /* Tu lógica de reseteo no cambia */ }
-    if(dom.downloadTemplateBtn) dom.downloadTemplateBtn.addEventListener('click', () => { /* Tu lógica de descarga no cambia */ });
-    function switchTab(targetTab) { /* Tu lógica de pestañas no cambia */ }
+    if(dom.fileUpload) dom.fileUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                if (json.length > 0 && (!json[0].hasOwnProperty('nombre') || !json[0].hasOwnProperty('telefono'))) {
+                    alert('File must contain at least "nombre" and "telefono" columns.');
+                    resetFileState(); return;
+                }
+                leadsQueue = json;
+                currentLeadIndex = 0;
+                updateFileUI(file.name, leadsQueue.length);
+            } catch (error) { alert(App.i18n.getString('fileReadError')); resetFileState(); }
+        };
+        reader.readAsArrayBuffer(file);
+    });
 
+    function updateFileUI(fileName, leadCount) {
+        dom.fileUploadUi.classList.add('hidden');
+        dom.fileInfoUi.classList.remove('hidden');
+        dom.fileName.textContent = fileName;
+        if (leadCount > 0) {
+            dom.leadCount.textContent = App.i18n.getString('leadsFound').replace('{count}', leadCount);
+            dom.generateBtnText.textContent = App.i18n.getString('generateForLead').replace('{current}', 1).replace('{total}', leadCount);
+            dom.generateBtn.disabled = false;
+        } else {
+            dom.leadCount.textContent = App.i18n.getString('fileEmpty');
+            dom.generateBtn.disabled = true;
+        }
+    }
+
+    function resetFileState() {
+        leadsQueue = [];
+        currentLeadIndex = 0;
+        if (dom.fileUpload) dom.fileUpload.value = '';
+        dom.fileUploadUi.classList.remove('hidden');
+        dom.fileInfoUi.classList.add('hidden');
+        dom.generateBtnText.textContent = App.i18n.getString('generateLink');
+        dom.generateBtn.disabled = templates.length === 0;
+    }
+
+    if(dom.downloadTemplateBtn) dom.downloadTemplateBtn.addEventListener('click', () => {
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI("data:text/csv;charset=utf-8,nombre,apellido,telefono,empresa\nJuan,Perez,521234567890,Tech Corp"));
+        link.setAttribute("download", "plantilla_contactos_wc.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+    
+    function switchTab(targetTab) {
+        activeTab = targetTab;
+        dom.tabManual.classList.toggle('active', targetTab === 'manual');
+        dom.panelManual.classList.toggle('hidden', targetTab !== 'manual');
+        dom.tabFile.classList.toggle('active', targetTab === 'file');
+        dom.panelFile.classList.toggle('hidden', targetTab !== 'file');
+        if (targetTab === 'manual') {
+            resetFileState();
+        } else {
+            if (leadsQueue.length > 0) {
+                 if (currentLeadIndex >= leadsQueue.length) {
+                    dom.generateBtnText.textContent = App.i18n.getString('processFinished');
+                    dom.generateBtn.disabled = true; 
+                 } else {
+                    dom.generateBtnText.textContent = App.i18n.getString('generateForLead').replace('{current}', currentLeadIndex + 1).replace('{total}', leadsQueue.length);
+                    dom.generateBtn.disabled = false;
+                 }
+            } else {
+                dom.generateBtnText.textContent = App.i18n.getString('generateLink');
+            }
+        }
+    }
+    
     if(dom.tabManual) dom.tabManual.addEventListener('click', () => switchTab('manual'));
     if(dom.tabFile) dom.tabFile.addEventListener('click', () => switchTab('file'));
     if(dom.generateBtn) dom.generateBtn.addEventListener('click', handleGenerateClick);
