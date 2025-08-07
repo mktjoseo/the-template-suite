@@ -98,6 +98,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
+// --- FUNCIÓN AUXILIAR PARA CAPITALIZAR TEXTO ---
+function capitalize(str) {
+    if (typeof str !== 'string' || str.length === 0) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 // ===================================================================================
 // ============================= LÓGICA MAILCRAFT ====================================
 // ===================================================================================
@@ -321,7 +327,12 @@ function initMailCraft(user) {
                 const companyMatch = text.match(/(?:en|at|de|CEO en|CTO de|en la empresa)\s+([A-Z][\w\s.&,]+)/i);
                 if (companyMatch) { extracted.empresa = companyMatch[1].replace(/,$/, '').trim(); text = text.replace(companyMatch[0], ''); }
                 const nameParts = text.replace(/,/g, ' ').trim().split(/\s+/).filter(Boolean);
-                if (nameParts.length > 0) { extracted.nombre = nameParts[0]; if (nameParts.length > 1) extracted.apellido = nameParts.slice(1).join(' '); }
+                if (nameParts.length > 0) {
+                    extracted.nombre = capitalize(nameParts[0]);
+                    if (nameParts.length > 1) {
+                        extracted.apellido = nameParts.slice(1).map(capitalize).join(' ');
+                    }
+                }
                 resolve(extracted);
             }, 500);
         });
@@ -605,7 +616,12 @@ function initWhatsCraft(user) {
                 const companyMatch = remainingText.match(/(?:en|at|de|CEO en|CTO de|en la empresa)\s+([A-Z][\w\s.&,]+)/i);
                 if (companyMatch) { extracted.empresa = companyMatch[1].replace(/,$/, '').trim(); remainingText = remainingText.replace(companyMatch[0], ''); }
                 const nameParts = remainingText.replace(/,/g, ' ').trim().split(/\s+/).filter(Boolean);
-                if (nameParts.length > 0) { extracted.nombre = nameParts[0]; if (nameParts.length > 1) extracted.apellido = nameParts.slice(1).join(' '); }
+                if (nameParts.length > 0) {
+                    extracted.nombre = capitalize(nameParts[0]);
+                    if (nameParts.length > 1) {
+                        extracted.apellido = nameParts.slice(1).map(capitalize).join(' ');
+                    }
+                }
                 resolve(extracted);
             }, 500);
         });
