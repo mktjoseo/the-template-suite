@@ -55,7 +55,10 @@
                 </select>
             </div>
             <div>
-                <button type="submit" class="w-full bg-magenta text-white font-bold py-4 px-4 rounded-lg hover:bg-opacity-90 transition-all duration-300" data-i18n="createAccountButton">Crear Cuenta</button>
+                <button type="submit" id="submit-button" class="w-full bg-magenta text-white font-bold py-4 px-4 rounded-lg hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center">
+                    <span class="button-text" data-i18n="createAccountButton">Crear Cuenta</span>
+                    <div class="loader-white hidden"></div>
+                </button>
             </div>
         </form>
 

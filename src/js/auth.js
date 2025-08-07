@@ -29,64 +29,81 @@ async function addDefaultTemplates(userId) {
 
 
 // --- REGISTRATION LOGIC ---
-const registerForm = document.getElementById('register-form');
 if (registerForm) {
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('name').value;
-        const lastname = document.getElementById('lastname').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        const submitButton = registerForm.querySelector('#submit-button');
+        const buttonText = submitButton.querySelector('.button-text');
+        const loader = submitButton.querySelector('.loader-white');
 
-        // 1. Sign up the user
-        const { data, error } = await supabase.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                // You can add extra data here, which gets stored in auth.users table
-                data: {
-                    name: name,
-                    last_name: lastname,
-                }
+        // Inicia la carga
+        submitButton.disabled = true;
+        buttonText.classList.add('hidden');
+        loader.classList.remove('hidden');
+
+        try {
+            const name = document.getElementById('name').value;
+            const lastname = document.getElementById('lastname').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data, error } = await supabase.auth.signUp({
+                email: email, password: password,
+                options: { data: { name: name, last_name: lastname } }
+            });
+
+            if (error) {
+                alert('Error signing up: ' + error.message);
+                return;
             }
-        });
 
-        if (error) {
-            alert('Error signing up: ' + error.message);
-            return;
-        }
-
-        if (data.user) {
-            // 2. Add the default templates for the new user
-            await addDefaultTemplates(data.user.id);
-            alert('Success! Please check your email to confirm your account.');
-            // Redirect to a "check your email" page or the login page
-            window.location.href = 'index.html';
+            if (data.user) {
+                await addDefaultTemplates(data.user.id);
+                alert('Success! Please check your email to confirm your account.');
+                window.location.href = 'index.html';
+            }
+        } finally {
+            // Detiene la carga (siempre se ejecuta, incluso con errores)
+            submitButton.disabled = false;
+            buttonText.classList.remove('hidden');
+            loader.classList.add('hidden');
         }
     });
 }
-
 
 // --- LOGIN LOGIC ---
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        const submitButton = loginForm.querySelector('#submit-button');
+        const buttonText = submitButton.querySelector('.button-text');
+        const loader = submitButton.querySelector('.loader-white');
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email: email,
-            password: password,
-        });
+        // Inicia la carga
+        submitButton.disabled = true;
+        buttonText.classList.add('hidden');
+        loader.classList.remove('hidden');
 
-        if (error) {
-            alert('Error logging in: ' + error.message);
-            return;
+        try {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                alert('Error logging in: ' + error.message);
+                return;
+            }
+            window.location.href = 'app.html';
+        } finally {
+            // Detiene la carga
+            submitButton.disabled = false;
+            buttonText.classList.remove('hidden');
+            loader.classList.add('hidden');
         }
-
-        // On successful login, Supabase sets a session cookie.
-        // Redirect to the main app.
-        window.location.href = 'app.html';
     });
 }

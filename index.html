@@ -45,7 +45,10 @@
                 <a href="#" class="text-sm text-blue-600 hover:text-blue-800 transition-colors" data-i18n="forgotPassword">¿Olvidaste tu contraseña?</a>
             </div>
             <div>
-                <button type="submit" class="w-full bg-graphite text-white font-bold py-4 px-4 rounded-lg hover:bg-opacity-90 transition-all duration-300" data-i18n="loginButton">Iniciar Sesión</button>
+                <button type="submit" id="submit-button" class="w-full bg-graphite text-white font-bold py-4 px-4 rounded-lg hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center">
+                    <span class="button-text" data-i18n="loginButton">Iniciar Sesión</span>
+                    <div class="loader-white hidden"></div>
+                </button>
             </div>
         </form>
 
