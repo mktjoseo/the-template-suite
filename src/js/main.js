@@ -44,6 +44,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const user = session.user;
+    if (user.user_metadata && user.user_metadata.lang && window.App && App.i18n) {
+        App.i18n.setLanguage(user.user_metadata.lang);
+    }    
 
     if (window.App && App.i18n) {
         App.i18n.updateContent();

@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Cuenta - Template Suite</title>
-    <script type="module" src="src/js/supabase-client.js"></script>
-    <script src="src/js/i18n.js"></script>   
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,7 +28,7 @@
         <h1 class="text-3xl sm:text-4xl font-bold text-graphite mb-2" data-i18n="registerTitle">Crea tu cuenta en Template Suite</h1>
         <p class="text-gray-500 mb-8" data-i18n="registerSubtitle">Comienza a usar la herramienta para generar plantillas para email y whatsapp en segundos.</p>
 
-        <form id="register-form" class="space-y-6">
+        <form id="register-form" class="space-y-6" novalidate>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                  <div>
                     <input type="text" id="name" data-i18n="namePlaceholder" placeholder="Nombre" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-graphite focus:border-graphite transition" required>
@@ -62,13 +60,13 @@
             </div>
         </form>
 
-        <!-- Texto y enlace a Iniciar Sesión (CÓDIGO AÑADIDO) -->
         <p class="mt-8 text-gray-600">
             <span data-i18n="alreadyAccount">¿Ya tienes una cuenta?</span>
             <a href="index.html" class="text-magenta font-semibold hover:underline" data-i18n="loginHere">Inicia sesión aquí</a>
         </p>
     </div>
     
+    <script type="module" src="src/js/supabase-client.js"></script>
     <script src="src/js/i18n.js"></script>
     <script type="module" src="src/js/auth.js"></script>
 </body>
