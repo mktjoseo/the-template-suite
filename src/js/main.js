@@ -322,11 +322,24 @@ function initMailCraft(user) {
         return new Promise(resolve => {
             setTimeout(() => {
                 const extracted = { nombre: '', apellido: '', email: '', empresa: '' };
-                const emailMatch = text.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
-                if (emailMatch) { extracted.email = emailMatch[0]; text = text.replace(extracted.email, ''); }
-                const companyMatch = text.match(/(?:en|at|de|CEO en|CTO de|en la empresa)\s+([A-Z][\w\s.&,]+)/i);
-                if (companyMatch) { extracted.empresa = companyMatch[1].replace(/,$/, '').trim(); text = text.replace(companyMatch[0], ''); }
-                const nameParts = text.replace(/,/g, ' ').trim().split(/\s+/).filter(Boolean);
+                let remainingText = text;
+
+                // --- MEJORA ---
+                // Primero, busca y elimina cualquier número de teléfono para que no interfiera.
+                const phoneRegex = /(?:[+\d]{1,4})?(?:[() \-.]*\d){8,}/g;
+                const phoneMatches = remainingText.match(phoneRegex);
+                if (phoneMatches) {
+                    const phoneText = phoneMatches.sort((a, b) => b.length - a.length)[0];
+                    remainingText = remainingText.replace(phoneText, '');
+                }
+
+                const emailMatch = remainingText.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
+                if (emailMatch) { extracted.email = emailMatch[0]; remainingText = remainingText.replace(extracted.email, ''); }
+
+                const companyMatch = remainingText.match(/(?:en|at|de|CEO en|CTO de|en la empresa)\s+([A-Z][\w\s.&,]+)/i);
+                if (companyMatch) { extracted.empresa = companyMatch[1].replace(/,$/, '').trim(); remainingText = remainingText.replace(companyMatch[0], ''); }
+
+                const nameParts = remainingText.replace(/,/g, ' ').trim().split(/\s+/).filter(Boolean);
                 if (nameParts.length > 0) {
                     extracted.nombre = capitalize(nameParts[0]);
                     if (nameParts.length > 1) {
@@ -337,7 +350,7 @@ function initMailCraft(user) {
             }, 500);
         });
     }
-    
+
     function setUiLoading(isLoading) {
         dom.generateBtn.disabled = isLoading;
         dom.loadingSpinner.classList.toggle('hidden', !isLoading);
